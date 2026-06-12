@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Does Your Brain Say About You? | Free Quiz</title>
+<meta name="description" content="Discover the hidden secret your brain has been waiting to tell you. Take this 60-second quiz.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --ink:       #0d0d0d;
+    --paper:     #faf8f4;
+    --gold:      #c9a84c;
+    --gold-soft: #f0e8d0;
+    --deep:      #1a1230;
+    --accent:    #7c4dff;
+    --accent2:   #ff6b6b;
+    --muted:     #6b6b7a;
+    --radius:    14px;
+    --shadow:    0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--deep);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── STARS BG ─── */
+  .stars-bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(124,77,255,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.12) 0%, transparent 50%),
+      #0d0820;
+    z-index: 0;
+  }
+  .stars-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 65%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 90% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 50%, rgba(255,255,255,0.3) 0%, transparent 100%);
+  }
+
+  /* ─── WRAPPER ─── */
+  .screen {
+    display: none;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .screen.active { display: flex; }
+
+  .card {
+    background: var(--paper);
+    border-radius: 24px;
+    box-shadow: var(--shadow), 0 0 80px rgba(124,77,255,0.15);
+    padding: 40px 36px;
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--accent), var(--accent2));
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-wrap {
+    margin-bottom: 28px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .progress-bar {
+    height: 5px;
+    background: #e5e0d8;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--accent));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  h1, h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--deep);
+    line-height: 1.2;
+  }
+  h1 { font-size: clamp(26px, 5vw, 38px); margin-bottom: 14px; }
+  h2 { font-size: clamp(20px, 4vw, 26px); margin-bottom: 20px; }
+  .sub {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  /* ─── INTRO HERO ─── */
+  .brain-icon {
+    font-size: 64px;
+    display: block;
+    text-align: center;
+    margin-bottom: 18px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  .trust-row {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .trust-pill {
+    background: var(--gold-soft);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #7a5a1a;
+    font-weight: 500;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, var(--accent), #5c2ed4);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 17px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 24px rgba(124,77,255,0.38);
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(124,77,255,0.48);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #d4a832, #c9843a);
+    box-shadow: 0 6px 24px rgba(201,168,76,0.38);
+  }
+  .btn-gold:hover { box-shadow: 0 10px 32px rgba(201,168,76,0.5); }
+
+  /* ─── ANSWER OPTIONS ─── */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .option {
+    padding: 16px 20px;
+    border: 2px solid #e0dbd0;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    color: var(--ink);
+    line-height: 1.45;
+    font-weight: 400;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    background: #f5f0ff;
+    transform: translateX(4px);
+  }
+  .option.selected {
+    border-color: var(--accent);
+    background: #ede8ff;
+    font-weight: 500;
+  }
+  .option-emoji { margin-right: 8px; }
+
+  /* ─── URGENCY BAR ─── */
+  .urgency-bar {
+    background: linear-gradient(135deg, #fff3e8, #ffe8e8);
+    border: 1px solid #ffd0b0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #8a3000;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .urgency-dot {
+    width: 8px; height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  /* ─── RESULT PAGE ─── */
+  .result-badge {
+    background: linear-gradient(135deg, var(--gold), #e8b84b);
+    border-radius: 16px;
+    padding: 20px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .result-badge .score {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .result-badge .score-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .result-insight {
+    background: #f5f0ff;
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #3a2870;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .traits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .trait {
+    background: #fff;
+    border: 1px solid #e8e3da;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .trait-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .trait-name { font-weight: 600; color: var(--deep); font-size: 13px; }
+  .trait-val  { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* ─── BRIDGE PAGE ─── */
+  .reveal-block {
+    background: linear-gradient(135deg, #1a1230, #2d1b6e);
+    border-radius: 18px;
+    padding: 28px 24px;
+    color: #fff;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .reveal-block::after {
+    content: '🎵';
+    position: absolute;
+    right: -10px; top: -10px;
+    font-size: 80px;
+    opacity: 0.08;
+  }
+  .reveal-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: var(--gold);
+  }
+  .reveal-block p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .countdown-wrap {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .countdown-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .countdown-timer {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+  }
+
+  .social-proof {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    background: #f5f5f2;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+  .avatars { display: flex; }
+  .av {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-left: -6px;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: #fff;
+  }
+  .av:first-child { margin-left: 0; }
+
+  .disclaimer {
+    font-size: 11px;
+    color: #aaa;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+
+  /* ─── FOOTER NAV ─── */
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 16px;
+  }
+  .footer-nav a {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+  }
+  .footer-nav a:hover { color: rgba(255,255,255,0.7); }
+
+  /* ─── LOADER ─── */
+  .loader-wrap {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .loader {
+    width: 48px; height: 48px;
+    border: 3px solid #e5e0d8;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text {
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .card { padding: 28px 20px; }
+    .traits { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars-bg"></div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 0 – INTRO / HOOK
+══════════════════════════════════════════ -->
+<div class="screen active" id="screen-intro">
+  <div class="card">
+    <span class="eyebrow">Brain Science Quiz</span>
+    <span class="brain-icon">🧠</span>
+    <h1>Are You Using Less Than 10% of Your Brain's True Potential?</h1>
+    <p class="sub">
+      Scientists have discovered a hidden "frequency" inside the human brain that separates
+      peak performers from everyone else. This 60-second quiz reveals exactly where you stand —
+      and what you can do about it <em>starting today.</em>
+    </p>
+
+    <div class="urgency-bar">
+      <span class="urgency-dot"></span>
+      <span>🔥 <strong>2,847 people</strong> discovered their results in the last 24 hours</span>
+    </div>
+
+    <div class="trust-row">
+      <span class="trust-pill">⚡ 60 Seconds</span>
+      <span class="trust-pill">🔒 100% Private</span>
+      <span class="trust-pill">🎯 Personalized</span>
+    </div>
+
+    <button class="btn-primary" onclick="goTo('screen-q1')">
+      Reveal My Brain Type →
+    </button>
+    <p class="disclaimer" style="margin-top:14px;">
+      No email required. Instant results. Your data stays private.
+    </p>
+  </div>
+  <nav class="footer-nav">
+    <a href="#" onclick="showPolicy('privacy')">Privacy Policy</a>
+    <a href="#" onclick="showPolicy('terms')">Terms</a>
+    <a href="#" onclick="showPolicy('disclaimer')">Disclaimer</a>
+    <a href="#" onclick="showPolicy('contact')">Contact</a>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════
+     Q1
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-q1">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Question 1 of 5</span><span>0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+    <span class="eyebrow">Your Mind</span>
+    <h2>When you wake up in the morning, what best describes your mental state?</h2>
+    <div class="options">
+      <button class="option" onclick="answer('q1','a','screen-q2')">
+        <span class="option-emoji">😴</span> Foggy — it takes me a while to feel fully "on"
+      </button>
+      <button class="option" onclick="answer('q1','b','screen-q2')">
+        <span class="option-emoji">😐</span> Neutral — I get going eventually
+      </button>
+      <button class="option" onclick="answer('q1','c','screen-q2')">
+        <span class="option-emoji">⚡</span> Alert — my mind races as soon as I open my eyes
+      </button>
+      <button class="option" onclick="answer('q1','d','screen-q2')">
+        <span class="option-emoji">🌀</span> Scattered — lots of thoughts, hard to focus
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     Q2
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-q2">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Question 2 of 5</span><span>20%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+    </div>
+    <span class="eyebrow">Memory & Focus</span>
+    <h2>How often do you forget things — names, tasks, where you put something?</h2>
+    <div class="options">
+      <button class="option" onclick="answer('q2','a','screen-q3')">
+        <span class="option-emoji">😬</span> Constantly — it's embarrassing
+      </button>
+      <button class="option" onclick="answer('q2','b','screen-q3')">
+        <span class="option-emoji">🤔</span> Often — more than I'd like
+      </button>
+      <button class="option" onclick="answer('q2','c','screen-q3')">
+        <span class="option-emoji">😊</span> Occasionally — just normal stuff
+      </button>
+      <button class="option" onclick="answer('q2','d','screen-q3')">
+        <span class="option-emoji">🦅</span> Rarely — I have a sharp memory
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     Q3
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-q3">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Question 3 of 5</span><span>40%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+    </div>
+    <span class="eyebrow">Learning & Creativity</span>
+    <h2>When you try to learn something new, what happens?</h2>
+    <div class="options">
+      <button class="option" onclick="answer('q3','a','screen-q4')">
+        <span class="option-emoji">🐢</span> It takes a long time and I have to repeat it many times
+      </button>
+      <button class="option" onclick="answer('q3','b','screen-q4')">
+        <span class="option-emoji">📚</span> I can learn but it doesn't always stick
+      </button>
+      <button class="option" onclick="answer('q3','c','screen-q4')">
+        <span class="option-emoji">✨</span> I pick things up quickly once I find my rhythm
+      </button>
+      <button class="option" onclick="answer('q3','d','screen-q4')">
+        <span class="option-emoji">🚀</span> Fast — I make connections most people miss
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     Q4
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-q4">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Question 4 of 5</span><span>60%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+    </div>
+    <span class="eyebrow">Emotional Intelligence</span>
+    <h2>How do you respond when under pressure or stress?</h2>
+    <div class="options">
+      <button class="option" onclick="answer('q4','a','screen-q5')">
+        <span class="option-emoji">😰</span> I freeze or panic — my mind goes blank
+      </button>
+      <button class="option" onclick="answer('q4','b','screen-q5')">
+        <span class="option-emoji">😤</span> I push through but feel drained afterward
+      </button>
+      <button class="option" onclick="answer('q4','c','screen-q5')">
+        <span class="option-emoji">🎯</span> I stay mostly calm and work through it
+      </button>
+      <button class="option" onclick="answer('q4','d','screen-q5')">
+        <span class="option-emoji">🏔️</span> Pressure sharpens my thinking — I thrive on it
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     Q5
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-q5">
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Question 5 of 5</span><span>80%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+    </div>
+    <span class="eyebrow">Your Goal</span>
+    <h2>If you could upgrade ONE thing about your mind right now, what would it be?</h2>
+    <div class="options">
+      <button class="option" onclick="answer('q5','a','screen-loading')">
+        <span class="option-emoji">🧩</span> Focus & concentration
+      </button>
+      <button class="option" onclick="answer('q5','b','screen-loading')">
+        <span class="option-emoji">💾</span> Memory & recall
+      </button>
+      <button class="option" onclick="answer('q5','c','screen-loading')">
+        <span class="option-emoji">💡</span> Creativity & problem-solving
+      </button>
+      <button class="option" onclick="answer('q5','d','screen-loading')">
+        <span class="option-emoji">🧘</span> Calm, clarity & emotional control
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOADING
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-loading">
+  <div class="card">
+    <div class="loader-wrap">
+      <div class="loader"></div>
+      <p class="loader-text" id="loader-msg">Analyzing your brain patterns…</p>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Processing</span><span id="load-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="load-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     RESULT
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-result">
+  <div class="card">
+    <span class="eyebrow">Your Brain Profile</span>
+
+    <div class="result-badge">
+      <div class="score" id="result-score">72</div>
+      <div class="score-label">Brain Activation Index™</div>
+    </div>
+
+    <h2 id="result-headline">The Dormant Genius</h2>
+
+    <div class="result-insight" id="result-insight">
+      Your mind holds remarkable untapped potential. The patterns in your answers reveal
+      a brain that is wired for brilliance — but something is blocking the signal.
+      The good news? Scientists have recently identified exactly what that blockage is.
+    </div>
+
+    <div class="traits" id="result-traits">
+      <div class="trait"><span class="trait-icon">🔮</span><span class="trait-name">Intuition</span><div class="trait-val">High latency</div></div>
+      <div class="trait"><span class="trait-icon">⚡</span><span class="trait-name">Processing</span><div class="trait-val">Partially blocked</div></div>
+      <div class="trait"><span class="trait-icon">💾</span><span class="trait-name">Memory</span><div class="trait-val">Below peak</div></div>
+      <div class="trait"><span class="trait-icon">🎨</span><span class="trait-name">Creativity</span><div class="trait-val">Suppressed signal</div></div>
+    </div>
+
+    <div class="urgency-bar">
+      <span class="urgency-dot"></span>
+      <span>A specific discovery was made for people with your exact brain type. It's time-sensitive.</span>
+    </div>
+
+    <button class="btn-primary btn-gold" onclick="goTo('screen-bridge')">
+      Show Me What's Blocking Me →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BRIDGE PAGE
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-bridge">
+  <div class="card">
+    <span class="eyebrow">The Missing Piece</span>
+    <h1 style="font-size:clamp(22px,4vw,30px); margin-bottom:16px;">
+      Scientists Found a Hidden "Brain Key" — And It's Not What You Think
+    </h1>
+
+    <div class="reveal-block">
+      <h3>The Discovery</h3>
+      <p>
+        For decades, neuroscientists believed peak cognitive performance required years of
+        training, expensive supplements, or the right genetics. <br><br>
+        Then a small research team stumbled onto something remarkable: a specific
+        <strong style="color:var(--gold);">auditory frequency pattern</strong> that, when introduced
+        to the brain, appears to "unlock" dormant neural pathways within minutes.<br><br>
+        Early participants reported feeling sharper, calmer, and more focused — simply by
+        <em>listening.</em> No pills. No long routines. Just sound.
+      </p>
+    </div>
+
+    <div class="urgency-bar">
+      <span class="urgency-dot"></span>
+      <span>⏳ Access to the full method is being shared publicly for a <strong>limited time</strong> only</span>
+    </div>
+
+    <div class="countdown-wrap">
+      <div class="countdown-label">This page expires in</div>
+      <div class="countdown-timer" id="countdown">14:59</div>
+    </div>
+
+    <div class="social-proof">
+      <div class="avatars">
+        <div class="av">J</div>
+        <div class="av">M</div>
+        <div class="av">A</div>
+        <div class="av">R</div>
+      </div>
+      <span><strong>11,342 people</strong> with your brain type have already tried this</span>
+    </div>
+
+    <a class="btn-primary btn-gold" href="https://105aecsar6yau41bu8mkt-2l8q.hop.clickbank.net/?&tid=Reet" target="_blank" rel="noopener noreferrer" id="cta-btn">
+      🎵 Yes — Unlock My Brain Now →
+    </a>
+
+    <p class="disclaimer">
+      Results vary by individual. This quiz is for informational and entertainment purposes only
+      and does not constitute medical advice. Consult a qualified healthcare professional before
+      making any health decisions. This page may contain affiliate links; we may receive a
+      commission if you purchase through them, at no additional cost to you.
+      By continuing, you agree to our <a href="#" onclick="showPolicy('terms')" style="color:#888;">Terms</a>
+      and <a href="#" onclick="showPolicy('privacy')" style="color:#888;">Privacy Policy</a>.
+    </p>
+  </div>
+  <nav class="footer-nav">
+    <a href="#" onclick="showPolicy('privacy')">Privacy Policy</a>
+    <a href="#" onclick="showPolicy('terms')">Terms of Service</a>
+    <a href="#" onclick="showPolicy('disclaimer')">Disclaimer</a>
+    <a href="#" onclick="showPolicy('contact')">Contact Us</a>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════
+     POLICY MODAL
+══════════════════════════════════════════ -->
+<div id="policy-modal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#faf8f4; border-radius:20px; max-width:540px; width:100%; max-height:80vh; overflow-y:auto; padding:32px 28px; position:relative;">
+    <button onclick="closePolicy()" style="position:absolute; top:14px; right:16px; background:none; border:none; font-size:22px; cursor:pointer; color:#666;">✕</button>
+    <h3 id="policy-title" style="font-family:'Playfair Display',serif; font-size:22px; color:#1a1230; margin-bottom:16px;"></h3>
+    <div id="policy-body" style="font-size:14px; line-height:1.75; color:#444;"></div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───
+const answers = {};
+
+// ─── NAVIGATION ───
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'screen-loading') startLoader();
+  if (id === 'screen-bridge') startCountdown();
+}
+
+function answer(q, val, next) {
+  answers[q] = val;
+  goTo(next);
+}
+
+// ─── LOADING SEQUENCE ───
+function startLoader() {
+  const msgs = [
+    'Analyzing your brain patterns…',
+    'Mapping neural frequency signature…',
+    'Comparing with 14,000+ profiles…',
+    'Calculating your Brain Activation Index™…',
+    'Preparing your personalized report…'
+  ];
+  let pct = 0;
+  let msgIdx = 0;
+  const bar = document.getElementById('load-bar');
+  const pctEl = document.getElementById('load-pct');
+  const msgEl = document.getElementById('loader-msg');
+
+  const iv = setInterval(() => {
+    pct += Math.random() * 8 + 4;
+    if (pct > 100) pct = 100;
+    bar.style.width = pct + '%';
+    pctEl.textContent = Math.round(pct) + '%';
+    if (pct > (msgIdx + 1) * 20 && msgIdx < msgs.length - 1) {
+      msgIdx++;
+      msgEl.textContent = msgs[msgIdx];
+    }
+    if (pct >= 100) {
+      clearInterval(iv);
+      setTimeout(() => {
+        buildResult();
+        goTo('screen-result');
+      }, 600);
+    }
+  }, 180);
+}
+
+// ─── RESULT LOGIC ───
+function buildResult() {
+  const scoreMap = { a: 1, b: 2, c: 3, d: 4 };
+  let total = 0;
+  Object.values(answers).forEach(v => { total += scoreMap[v] || 2; });
+  const max = 5 * 4;
+  const pct = Math.round((total / max) * 100);
+
+  let profile, headline, insight, traits;
+
+  if (pct < 40) {
+    profile = 48 + Math.round(Math.random() * 8);
+    headline = 'The Sleeping Titan';
+    insight = 'Your brain is working hard just to get through the day — but under the surface, there is extraordinary raw power waiting to be unlocked. People with your exact profile often experience a dramatic transformation when the right "trigger" is introduced.';
+    traits = [
+      ['🌊','Depth','Untapped reserves'],['⚡','Energy','Needs a spark'],
+      ['🔮','Intuition','Heavily suppressed'],['💡','Clarity','Clouded signal']
+    ];
+  } else if (pct < 65) {
+    profile = 62 + Math.round(Math.random() * 10);
+    headline = 'The Dormant Genius';
+    insight = 'Your mind holds remarkable untapped potential. The patterns in your answers reveal a brain wired for brilliance — but something is actively blocking the signal. Researchers have recently pinpointed exactly what that blockage is, and the solution is surprisingly simple.';
+    traits = [
+      ['🔮','Intuition','High latency'],['⚡','Processing','Partially blocked'],
+      ['💾','Memory','Below peak'],['🎨','Creativity','Suppressed signal']
+    ];
+  } else {
+    profile = 78 + Math.round(Math.random() * 12);
+    headline = 'The Awakening Mind';
+    insight = 'You are already operating above average — but your score reveals you are still only accessing a fraction of your total brainpower. The gap between where you are now and your absolute peak is smaller than you think, and it can be closed with one specific method.';
+    traits = [
+      ['🚀','Processing','Near peak'],['💾','Memory','Good, improvable'],
+      ['🎯','Focus','Strong baseline'],['🌟','Potential','Barely tapped']
+    ];
+  }
+
+  document.getElementById('result-score').textContent = profile;
+  document.getElementById('result-headline').textContent = headline;
+  document.getElementById('result-insight').textContent = insight;
+
+  const container = document.getElementById('result-traits');
+  container.innerHTML = traits.map(([icon, name, val]) =>
+    `<div class="trait"><span class="trait-icon">${icon}</span><span class="trait-name">${name}</span><div class="trait-val">${val}</div></div>`
+  ).join('');
+}
+
+// ─── COUNTDOWN ───
+function startCountdown() {
+  let remaining = 14 * 60 + 59;
+  const el = document.getElementById('countdown');
+  const iv = setInterval(() => {
+    if (remaining <= 0) { clearInterval(iv); el.textContent = '00:00'; return; }
+    remaining--;
+    const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+    const s = String(remaining % 60).padStart(2, '0');
+    el.textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+// ─── POLICY MODAL ───
+const policies = {
+  privacy: {
+    title: 'Privacy Policy',
+    body: `<p><strong>Last updated: 2025</strong></p><br>
+    <p>We respect your privacy. This quiz collects no personally identifiable information. We do not require an email address, name, or any contact details to use this quiz.</p><br>
+    <p><strong>What we collect:</strong> Anonymous quiz answers are used solely to generate your personalized result. No data is stored, sold, or shared with third parties.</p><br>
+    <p><strong>Cookies:</strong> This page does not use tracking cookies or pixels.</p><br>
+    <p><strong>Third-party links:</strong> This page may link to third-party websites. We are not responsible for their privacy practices.</p><br>
+    <p><strong>Contact:</strong> For privacy questions, use the contact link below.</p>`
+  },
+  terms: {
+    title: 'Terms of Service',
+    body: `<p><strong>Last updated: 2025</strong></p><br>
+    <p>By using this quiz, you agree to the following terms.</p><br>
+    <p><strong>Entertainment & Information Only:</strong> This quiz is provided for informational and entertainment purposes only. It does not constitute medical, psychological, or professional advice of any kind.</p><br>
+    <p><strong>No Guarantees:</strong> Results are generalized and not scientifically validated diagnostic tools. Individual results will vary.</p><br>
+    <p><strong>Affiliate Disclosure:</strong> This page contains affiliate marketing links. If you click a link and make a purchase, we may receive a commission at no additional cost to you. We only promote products we believe may be of value to our audience.</p><br>
+    <p><strong>Intellectual Property:</strong> All content on this page is proprietary. Reproduction without permission is prohibited.</p>`
+  },
+  disclaimer: {
+    title: 'Disclaimer',
+    body: `<p>The content on this page is for <strong>informational and entertainment purposes only</strong> and should not be interpreted as medical advice, diagnosis, or treatment.</p><br>
+    <p>Quiz results are generated based on your self-reported answers and are not based on clinical evaluation or scientific measurement of brain activity.</p><br>
+    <p>Always consult with a qualified healthcare professional before making decisions about your health or well-being.</p><br>
+    <p>Individual results from any product linked on this page will vary. Testimonials and claims represent exceptional results and may not be typical.</p><br>
+    <p><strong>FTC Disclosure:</strong> This page contains affiliate links. We receive compensation when readers purchase products through our links. This does not affect our editorial integrity.</p>`
+  },
+  contact: {
+    title: 'Contact Us',
+    body: `<p>Have a question, concern, or feedback? We'd love to hear from you.</p><br>
+    <p>Please use the contact information associated with the product you were directed to, or reach us via the support page of the product provider.</p><br>
+    <p>For affiliate or partnership inquiries, or if you have questions about this quiz, please send an email to the address on file with your domain registrar.</p>`
+  }
+};
+
+function showPolicy(type) {
+  const p = policies[type];
+  document.getElementById('policy-title').textContent = p.title;
+  document.getElementById('policy-body').innerHTML = p.body;
+  const modal = document.getElementById('policy-modal');
+  modal.style.display = 'flex';
+}
+function closePolicy() {
+  document.getElementById('policy-modal').style.display = 'none';
+}
+</script>
+</body>
+</html>
